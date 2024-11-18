@@ -1,0 +1,30 @@
+services:
+  postgresql:
+    image: postgresql
+    ports:
+      - "5432:5432"
+    environment:
+      MYSQL_ROOT_PASSWORD: P@ssw0rd
+      MYSQL_USER: product_user
+      MYSQL_PASSWORD: product_user_password
+      MYSQL_DATABASE: product
+
+  spring-boot-app:
+      build:
+        context: ./backend
+        dockerfile: Dockerfile
+      ports:
+        - "9876:9876"
+      depends_on:
+        - postgresql
+      environment:
+        SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/mydata
+        SPRING_DATASOURCE_USERNAME: postgres
+        SPRING_DATASOURCE_PASSWORD: pritiraju
+
+  react-app:
+      build:
+        context: ./frontend
+        dockerfile: Dockerfile
+      ports:
+        - "3001:80"
